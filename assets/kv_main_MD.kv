@@ -36,6 +36,7 @@ WindowManager:
     drunken: drunken
     amount_add: amount_add
     deficit: deficit
+    btn_notification: btn_notification
 
     GridLayout:
         canvas.before:
@@ -63,12 +64,20 @@ WindowManager:
                 theme_icon_color: "Custom"
                 icon_color: app.theme_cls.primary_light
 
-
-
                 on_release:
                     root.manager.transition = SlideTransition()
                     root.manager.transition.direction = 'left'
                     app.root.current = 'config'
+
+            MDIconButton:
+                id: btn_notification
+                icon: 'bell-off-outline'
+                pos_hint: {'top': 0.95, 'right': 0.15}
+                theme_icon_color: "Custom"
+                icon_color: app.theme_cls.primary_light
+
+                on_release:
+                    root.btn_noty()
 
 
 

@@ -139,6 +139,8 @@ class MainWindow(Screen):
     drunken_bar = ObjectProperty(None)
     sb_drunken_bar = ObjectProperty(None)
     deficit = ObjectProperty(None)
+    btn_notification = ObjectProperty(None)
+    notification = False
     wake_up_hour = 0
     drinking_rate = 0
     amount_drunken = 0
@@ -147,7 +149,13 @@ class MainWindow(Screen):
     first_open = True
     monthday = datetime.now().strftime('%d')
 
-
+    def btn_noty(self):
+        if self.notification:
+            self.notification = False
+            self.btn_notification.icon = 'bell-off-outline'
+        else:
+            self.notification = True
+            self.btn_notification.icon = 'bell-outline'
 
     def add(self):
         self.amount_drunken += self.amount_add.value
