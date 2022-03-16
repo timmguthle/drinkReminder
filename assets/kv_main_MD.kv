@@ -1,0 +1,292 @@
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:import CircularProgressBar kivy.uix.CircularProgressBarr
+
+WindowManager:
+    StartingScreen:
+    MainWindow:
+    ConfigWindow:
+
+
+
+<StartingScreen>:
+    name: 'start'
+
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgb: 1,1,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Image:
+            source: 'assets/drink_logo_final.png'
+            size_hint: (0.8,1)
+            pos_hint: {'x':0.1}
+
+
+
+<MainWindow>:
+    name: 'main'
+
+    sb_drunken_bar: sb_drunken_bar
+    drunken_bar: drunken_bar
+    dr: dr
+    sb_drunken: sb_drunken
+    drunken: drunken
+    amount_add: amount_add
+    deficit: deficit
+
+    GridLayout:
+        canvas.before:
+            Color:
+                rgb: 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+        cols: 1
+
+        FloatLayout:
+            size_hint: (1, 0.35)
+
+
+            Image:
+                source: 'assets/drink_logo_final.png'
+                size_hint: (0.5, 1)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            MDIconButton:
+                icon: 'cog-outline'
+                pos_hint: {'top': 0.95, 'right': 0.97}
+                theme_icon_color: "Custom"
+                icon_color: app.theme_cls.primary_light
+
+
+
+                on_release:
+                    root.manager.transition = SlideTransition()
+                    root.manager.transition.direction = 'left'
+                    app.root.current = 'config'
+
+
+
+
+        FloatLayout:
+            size_hint: (1, 1.8)
+
+
+            MD3Card:
+                padding: 10
+                size_hint: 0.4, 0.15
+                pos_hint: {'center_y': .9, 'x': .05}
+                radius:  [dp(12), dp(12), dp(12), dp(12)]
+
+                Label:
+                    markup: True
+                    id: dr
+                    text: ''
+                    halign: 'center'
+                    valign: 'center'
+
+
+            MD3Card:
+                padding: 10
+                size_hint: 0.4, 0.15
+                pos_hint: {'center_y': .9, 'right': .95}
+                radius:  [dp(12), dp(12), dp(12), dp(12)]
+
+                Label:
+                    id: deficit
+                    text: ''
+
+
+            MD3Card:
+                padding: 10
+                size_hint: 0.9, 0.7
+                pos_hint: {'center_x': .5, 'top': 0.75}
+                radius:  [dp(12), dp(12), dp(12), dp(12)]
+
+                FloatLayout:
+
+                    Label:
+                        size_hit: 0.8, 0.1
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.85}
+                        id: drunken
+                        text: 'Bis jetzt getrunken: \n 0ml'
+
+                    MDProgressBar:
+                        size_hint: 0.9, None
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                        id: drunken_bar
+                        value: 50
+
+                    MDProgressBar:
+                        size_hint: 0.9, None
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+                        id: sb_drunken_bar
+                        value: 70
+
+                    Label:
+                        size_hit: 0.8, 0.1
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.15}
+                        id: sb_drunken
+                        text: 'Bis jetzt getrunken haben sollte: '
+
+        FloatLayout:
+
+
+
+
+            Label:
+                text: f'[b]{int(amount_add.value)}[/b] ml'
+                size_hint: 0.8, 0.1
+                pos_hint: {'center_x': 0.5, 'top': 0.9}
+
+            MDIcon:
+                icon: 'cup-outline'
+                size_hint: 0.1, 0.1
+                pos_hint: {'center_y': 0.6, 'x': 0.05}
+
+            MDIcon:
+                icon: 'cup'
+                size_hint: 0.1, 0.1
+                pos_hint: {'center_y': 0.6, 'x': 0.85}
+
+            MDSlider:
+                id: amount_add
+                min: 0
+                max: 2000
+                step: 50
+                value: 250
+                value_track: True
+                size_hint: (.8,0.1)
+                pos_hint: {'x':0.1, 'center_y': 0.6}
+
+            MDRaisedButton:
+                text: 'trinken!'
+                size_hint: (.3, .2)
+                pos_hint: {'x': 0.35, 'y': .2}
+                on_press: root.add()
+                elevation: 14
+                md_bg_color: app.theme_cls.primary_light
+
+
+
+
+
+<ConfigWindow>:
+    name: 'config'
+
+    menge: menge
+    auf: auf
+    ab: ab
+
+
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    GridLayout:
+        cols: 1
+
+        FloatLayout:
+
+            MD3Card:
+                padding: 10
+                size_hint: 0.9, 0.2
+                pos_hint: {'center_y': .85, 'x': .05}
+                radius:  [dp(12), dp(12), dp(12), dp(12)]
+
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: 0.6, 1
+                        text: 'Angestrebte\nTrinkmenge '
+                    MDTextField:
+                        id: menge
+                        error: False
+                        helper_text_mode: 'on_error'
+                        text: '5000'
+                        hint_text: 'Volumen in ml'
+                        helper_text: 'Bitte nur Zahlen groesser 0'
+                        font_size: '20sp'
+                        on_text_validate: root.validate()
+                        on_focus: root.validate()
+
+            MD3Card:
+                padding: 10
+                size_hint: 0.9, 0.2
+                pos_hint: {'center_y': .6, 'x': .05}
+                radius:  [dp(12), dp(12), dp(12), dp(12)]
+
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: 0.6, 1
+                        text: f'Aufwachen:\n[b]{int(auf.value)}[/b] Uhr'
+                    MDSlider:
+                        show_off: False
+                        id: auf
+                        min: 0
+                        max: 23
+                        step: 1
+                        value: 8
+
+            MD3Card:
+                padding: 10
+                size_hint: 0.9, 0.2
+                pos_hint: {'center_y': .35, 'x': .05}
+                radius:  [dp(12), dp(12), dp(12), dp(12)]
+
+                GridLayout:
+                    cols: 2
+
+                    Label:
+                        size_hint: 0.6, 1
+                        text: f'Schlafenszeit:\n[b]{int(ab.value)}[/b] Uhr'
+                    MDSlider:
+                        show_off: False
+                        id: ab
+                        min: 0
+                        max: 23
+                        step: 1
+                        value: 23
+
+
+        FloatLayout:
+            size_hint: 1, 0.3
+            MDRaisedButton:
+                text: 'Speichern'
+                elevation: 14
+                md_bg_color: app.theme_cls.primary_light
+                size_hint: 0.3, 0.3
+                pos_hint: {'center_x': 0.5, 'y': 0.3}
+
+                on_release:
+                    root.manager.transition = SlideTransition()
+                    root.manager.transition.direction = 'right'
+                    if not menge.error: \
+                    app.root.current = 'main';
+                on_press:
+                    root.btn()
+
+            MDRaisedButton:
+                text: 'getrunken zurücksetzen'
+                elevation: 14
+                md_bg_color: app.theme_cls.primary_light
+                size_hint: 0.5, 0.3
+                pos_hint: {'center_x': 0.5, 'y': 0.75}
+                on_press:
+                    root.reset_drunken()
+
+
+<Label>:
+    color: 0,0,0,1
+    valign: 'center'
+    halign: 'center'
+    markup: True
