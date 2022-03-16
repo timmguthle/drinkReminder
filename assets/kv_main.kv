@@ -1,0 +1,188 @@
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
+
+WindowManager:
+    StartingScreen:
+    MainWindow:
+    ConfigWindow:
+
+
+
+<StartingScreen>:
+    name: 'start'
+
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgb: 1,1,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Image:
+            source: 'assets/drink_logo_final.png'
+            size_hint: (0.8,1)
+            pos_hint: {'x':0.1}
+
+
+
+
+<MainWindow>:
+    name: 'main'
+
+    dr: dr
+    sb_drunken: sb_drunken
+    drunken: drunken
+    amount_add: amount_add
+
+    GridLayout:
+        canvas.before:
+            Color:
+                rgb: 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+        cols: 1
+
+        FloatLayout:
+            size_hint: (1, 0.2)
+
+
+            Image:
+                source: 'assets/drink_logo_final.png'
+                size_hint: (0.5, 1)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Button:
+                size_hint: (0.2, 0.6)
+                pos_hint: {'x': .8, 'y': 0.2}
+                background_color: 1,1,1
+                background_normal: ''
+                background_down: ''
+
+
+                on_release:
+                    root.manager.transition = SlideTransition()
+                    root.manager.transition.direction = 'left'
+                    app.root.current = 'config'
+
+                Image:
+                    source: 'assets/gear.png'
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+                    size: self.parent.size
+
+
+        GridLayout:
+            rows: 3
+
+            Label:
+                id: dr
+                text: 'drinking rate [ml/h]: \n '
+                halign: 'center'
+                valign: 'center'
+
+            Label:
+                id: drunken
+                text: 'Bis jetzt getrunken: \n 0ml'
+
+            Label:
+                id: sb_drunken
+                text: 'Bis jetzt getrunken haben sollte: '
+
+        GridLayout:
+            cols: 2
+            FloatLayout:
+
+                Label:
+                    text: f'{int(amount_add.value)}ml'
+                    pos_hint: {'y': 0.1}
+
+                Slider:
+                    id: amount_add
+                    min: 0
+                    max: 2000
+                    step: 50
+                    value: 0
+                    value_track: True
+                    size_hint: (.8,0.1)
+                    pos_hint: {'x':0.1, 'y': 0.4}
+
+                Button:
+                    text: 'add drink'
+                    size_hint: (.4, .2)
+                    pos_hint: {'x': 0.3, 'y': .1}
+                    on_press: root.add()
+
+            Button:
+                text: 'Config'
+                on_release:
+                    root.manager.transition = SlideTransition()
+                    root.manager.transition.direction = 'left'
+                    app.root.current = 'config'
+
+
+<ConfigWindow>:
+    name: 'config'
+
+    menge: menge
+    auf: auf
+    ab: ab
+
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    GridLayout:
+        cols: 1
+
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: 'Trinkmenge[ml]: '
+            TextInput:
+                id: menge
+                multiline: False
+                text: '5000'
+
+            Label:
+                text: f'Aufstehen: {int(auf.value)} Uhr'
+            Slider:
+                id: auf
+                min: 0
+                max: 23
+                step: 1
+                value: 8
+
+            Label:
+                text: f'Ins Bett gehen: {int(ab.value)} Uhr'
+            Slider:
+                id: ab
+                min: 0
+                max: 23
+                step: 1
+                value: 23
+
+        Label:
+            id: tps
+            text: ''
+
+        Button:
+            text: 'Speichern'
+            on_release:
+                root.manager.transition = SlideTransition()
+                root.manager.transition.direction = 'right'
+                app.root.current = 'main'
+            on_press:
+                root.btn()
+
+
+<Label>:
+    color: 0,0,0,1
+    valign: 'center'
+    halign: 'center'

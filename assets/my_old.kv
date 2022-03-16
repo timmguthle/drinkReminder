@@ -1,0 +1,36 @@
+<MyGrid>
+
+    name: name
+
+    GridLayout:
+        cols:1
+        size: root.width, root.height
+
+        GridLayout:
+            cols:2
+            Label:
+                text: 'mein name ist'
+
+            TextInput:
+                id: name
+                multiline: False
+
+        Button:
+            text: 'Submit'
+            on_press:root.btn()
+
+<FloatLayout>:
+    cols: 2
+    Button:
+        pos_hint: {'x':0.5, 'top':1}
+        text: 'btn1'
+
+    Button:
+        id: btn2
+        text: 'btn2' if btn2.state == 'normal' else 'press'
+
+
+<Button>:
+    font_size: 40
+    color: 0.3,0,0,1
+    size_hint: 0.3, 0.1

@@ -1,0 +1,4 @@
+fuer GUI: Progressbar fuer Tageszeit und fuer Trinkmenge, vergleichen
+Notifications einrichten
+GUI schoener machen
+Button text Weiss machen
