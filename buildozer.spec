@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,certifi==2021.10.8,charset-normalizer==2.0.12,docutils==0.18.1,idna==3.3,Kivy==2.1.0,Kivy-Garden==0.1.4,kivymd==0.104.2,Pillow==9.0.1,Pygments==2.11.2,requests==2.27.1,urllib3==1.26.9
+requirements = python3,certifi==2021.10.8,charset-normalizer==2.0.12,docutils==0.18.1,idna==3.3,Kivy==2.1.0,Kivy-Garden==0.1.4,kivymd==0.104.2,Pillow,Pygments==2.11.2,requests==2.27.1,urllib3==1.26.9
 
 
 # (str) Custom source folders for requirements
@@ -81,7 +81,7 @@ fullscreen = False
 # red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray,
 # darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy,
 # olive, purple, silver, teal.
-android.presplash_color = blue
+android.presplash_color = white
 
 # (string) Presplash animation using Lottie format.
 # see https://lottiefiles.com/ for examples and https://airbnb.design/lottie/
