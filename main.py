@@ -3,14 +3,11 @@ from datetime import datetime
 from kivymd.app import MDApp
 from kivy.uix.gridlayout import GridLayout
 from kivy.properties import ObjectProperty
-from kivy.uix.floatlayout import FloatLayout
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.storage.jsonstore import JsonStore
 from kivy.clock import Clock
-from kivy.uix.screenmanager import FadeTransition, SlideTransition
-from kivy.core.window import Window
-from kivy.uix.CircularProgressBarr import CircularProgressBar
+from kivy.uix.screenmanager import FadeTransition
 from kivymd.uix.behaviors import RoundedRectangularElevationBehavior
 from kivymd.uix.card import MDCard
 from kivy.uix.behaviors import ButtonBehavior
@@ -19,7 +16,6 @@ from kivymd.uix.behaviors import (
     FakeRectangularElevationBehavior,
     BackgroundColorBehavior
 )
-
 
 
 class RectangularElevationButton(
