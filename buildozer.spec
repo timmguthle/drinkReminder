@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = Drink Reminder
+title = DrinkReminder
 
 # (str) Package name
-package.name = drinkR
+package.name = drinkreminder
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = org.test
@@ -37,17 +37,18 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,datetime
+requirements = python3,certifi==2021.10.8,charset-normalizer==2.0.12,docutils==0.18.1,idna==3.3,Kivy==2.1.0,Kivy-Garden==0.1.4,kivymd==0.104.2,Pillow==9.0.1,Pygments==2.11.2,requests==2.27.1,urllib3==1.26.9
+
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = assets/drinkReminder_startscreen.png
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+icon.filename = ./assets/drinkReminder_Icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -66,7 +67,7 @@ orientation = portrait
 osx.python_version = 3
 
 # Kivy version to use
-osx.kivy_version = 1.9.1
+osx.kivy_version = 2.1.0
 
 #
 # Android specific
@@ -80,7 +81,7 @@ fullscreen = False
 # red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray,
 # darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy,
 # olive, purple, silver, teal.
-#android.presplash_color = blue
+android.presplash_color = blue
 
 # (string) Presplash animation using Lottie format.
 # see https://lottiefiles.com/ for examples and https://airbnb.design/lottie/
@@ -99,7 +100,7 @@ fullscreen = False
 #android.features = android.hardware.usb.host
 
 # (int) Target Android API, should be as high as possible.
-#android.api = 27
+android.api = 30
 
 # (int) Minimum API your APK / AAB will support.
 #android.minapi = 21
