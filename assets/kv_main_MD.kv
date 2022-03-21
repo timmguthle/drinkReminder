@@ -150,17 +150,17 @@ WindowManager:
             Label:
                 text: f'[b]{int(amount_add.value)}[/b] ml'
                 size_hint: 0.8, 0.1
-                pos_hint: {'center_x': 0.5, 'top': 0.9}
+                pos_hint: {'center_x': 0.5, 'top': 0.95}
 
             MDIcon:
                 icon: 'cup-outline'
                 size_hint: 0.1, 0.1
-                pos_hint: {'center_y': 0.6, 'x': 0.05}
+                pos_hint: {'center_y': 0.7, 'x': 0.05}
 
             MDIcon:
                 icon: 'cup'
                 size_hint: 0.1, 0.1
-                pos_hint: {'center_y': 0.6, 'x': 0.85}
+                pos_hint: {'center_y': 0.7, 'x': 0.85}
 
             MDSlider:
                 id: amount_add
@@ -170,7 +170,7 @@ WindowManager:
                 value: 250
                 value_track: True
                 size_hint: (.8,0.1)
-                pos_hint: {'x':0.1, 'center_y': 0.6}
+                pos_hint: {'x':0.1, 'center_y': 0.7}
 
             MDRaisedButton:
                 text: 'trinken!'
