@@ -1,11 +1,7 @@
 import kivy
 from datetime import datetime
 from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.lang import Builder
@@ -24,13 +20,7 @@ from kivymd.uix.behaviors import (
     BackgroundColorBehavior
 )
 
-Window.size = (400, 600)
 
-class MyDesign(FloatLayout):
-    pass
-
-class MyProgress(CircularProgressBar):
-    pass
 
 class RectangularElevationButton(
     RectangularRippleBehavior,
@@ -51,23 +41,10 @@ class StartingScreen(Screen):
     def on_enter(self, *args):
         Clock.schedule_once(self.switch, 2)
         self.manager.transition = FadeTransition()
-        Clock.schedule_interval(self.animate, 0.05)
 
 
     def switch(self, dt):
         self.parent.current = 'main'
-
-    def animate(self, dt):
-        for Layout in self.children:
-            for bar in Layout.children:
-                if type(bar) == CircularProgressBar:
-                    if bar.value < bar.max:
-                        bar.value += 1
-                    else:
-                        bar.value = bar.min
-
-
-
 
 
 

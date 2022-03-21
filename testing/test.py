@@ -50,7 +50,7 @@ class SecondW(Screen):
 class WindowManager(ScreenManager):
     pass
 
-kv = Builder.load_file('../assets/my.kv')
+kv = Builder.load_file('assets /my.kv')
 
 
 class MyMainapp(App):
