@@ -4,6 +4,7 @@ WindowManager:
     StartingScreen:
     MainWindow:
     ConfigWindow:
+    StatWindow:
 
 
 
@@ -70,13 +71,15 @@ WindowManager:
 
             MDIconButton:
                 id: btn_notification
-                icon: 'bell-off-outline'
+                icon: 'poll'
                 pos_hint: {'top': 0.95, 'right': 0.15}
                 theme_icon_color: "Custom"
                 icon_color: app.theme_cls.primary_light
 
                 on_release:
-                    root.btn_noty()
+                    root.manager.transition = SlideTransition()
+                    root.manager.transition.direction = 'right'
+                    app.root.current = 'stat'
 
 
 
@@ -180,6 +183,26 @@ WindowManager:
                 elevation: 14
                 md_bg_color: app.theme_cls.primary_light
 
+
+<StatWindow>:
+    name: 'stat'
+    data_list: data_list
+
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            title: 'Statistik'
+            elevation: 10
+            right_action_items: [['arrow-right', lambda x: root.switch_back()]]
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                padding: 20
+                id: data_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
 
 
 

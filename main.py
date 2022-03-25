@@ -1,13 +1,14 @@
 import kivy
-from datetime import datetime
+from datetime import datetime, timedelta
 from kivymd.app import MDApp
-from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
+from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.storage.jsonstore import JsonStore
 from kivy.clock import Clock
-from kivy.uix.screenmanager import FadeTransition
+from kivy.uix.screenmanager import FadeTransition, SlideTransition
 from kivymd.uix.behaviors import RoundedRectangularElevationBehavior
 from kivymd.uix.card import MDCard
 from kivy.uix.behaviors import ButtonBehavior
@@ -97,11 +98,43 @@ class ConfigWindow(Screen):
 
     def reset_drunken(self):
         self.manager.get_screen('main').amount_drunken = 0
-        self.manager.get_screen('main').mystore.put('user_data', amount_drunken=0, day=datetime.now().strftime('%d'))
+        self.manager.get_screen('main').mystore.put('user_data', amount_drunken=0, date=datetime.now().strftime('%d'))
 
 
 class WindowManager(ScreenManager):
     pass
+
+
+class StatWindow(Screen):
+    data_list = ObjectProperty(None)
+    first_open = True
+
+    def on_pre_enter(self, *args):
+        if self.first_open:
+            archive = self.manager.get_screen('main').mystore.get('archive')['data']
+            archive.reverse()
+            for i in archive:
+                card = MD3Card(padding=10,
+                               height=200,
+                               size_hint=(0.9,None),
+                               radius=[12, 12, 12, 12]
+                               )
+                card.add_widget(Label(text=i['date']))
+                card.add_widget((Label(text=str(i['amount_drunken']))))
+                Widget = AnchorLayout(height=220,
+                                      size_hint=(0.9, None),
+                                      pos_hint={'center_x': 0.5, 'center_y': 0.7},
+                                      anchor_x='center',
+                                      anchor_y='center'
+                                      )
+                Widget.add_widget(card)
+                self.data_list.add_widget(Widget)
+                self.first_open = False
+
+    def switch_back(self):
+        self.manager.transition = SlideTransition()
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'main'
 
 
 class MainWindow(Screen):
@@ -121,6 +154,8 @@ class MainWindow(Screen):
     mystore = JsonStore('assets/data.json')
     first_open = True
     monthday = datetime.now().strftime('%d')
+    today = datetime.now().strftime('%d.%m.%Y')
+    yesterday = (datetime.now() - timedelta(days=1)).strftime('%d.%m.%Y')
 
     def btn_noty(self):
         if self.notification:
@@ -135,17 +170,21 @@ class MainWindow(Screen):
         self.amount_add.value = 0
         self.drunken.text = f'Bis jetzt getrunken: \n [b]{int(self.amount_drunken)}[/b] ml'
         self.drunken_bar.value = (self.amount_drunken / int(self.manager.get_screen('config').menge.text)) * 100
-        self.mystore.put('user_data', amount_drunken=self.amount_drunken, day=self.monthday)
+        self.mystore.put('user_data', amount_drunken=self.amount_drunken, date=self.today)
         self.update_deficit()
 
 
     def on_pre_enter(self, *args):
         global wake_up_date
 
-        if self.monthday != self.mystore.get('user_data')['day']:
+        if self.today != self.mystore.get('user_data')['date']:
+            archive = self.mystore.get('archive')['data']
+            archive.append({"date": self.yesterday, "amount_drunken": self.amount_drunken})
+            self.mystore.put('archive', data=archive)
             self.amount_drunken = 0
         else:
             self.amount_drunken = self.mystore.get('user_data')['amount_drunken']
+
         self.drunken.text = f'Bis jetzt getrunken: \n [b]{int(self.amount_drunken)}[/b] ml'
         self.drunken_bar.value = (self.amount_drunken / int(self.mystore.get('my_config')['menge'])) * 100
 
@@ -153,15 +192,14 @@ class MainWindow(Screen):
             if self.mystore.exists('my_config'):
                 self.dr.text = f'Trinkrate: \n [b]{self.mystore.get("my_config")["drinking_rate"]}[/b] ml/h'
                 self.wake_up_hour = self.mystore.get('my_config')['auf']
-                self.drinking_rate = self.mystore.get('my_config')['drinking_rate']
             self.first_open = False
         else:
             try:
                 self.dr.text = f'Trinkrate: \n [b]{self.mystore.get("my_config")["drinking_rate"]}[/b] ml/h'
                 self.wake_up_hour = int(self.manager.get_screen('config').auf.value)
-                self.drinking_rate = self.manager.get_screen('config').drinking_rate
             except kivy.uix.screenmanager.ScreenManagerException:
                 pass
+        self.drinking_rate = self.mystore.get('my_config')['drinking_rate']
 
         now = datetime.now()
         today = now.strftime('%d %m %Y')
@@ -171,7 +209,6 @@ class MainWindow(Screen):
             wake_up_str = f'{today} {str(self.wake_up_hour)}'
 
         wake_up_date = datetime.strptime(wake_up_str, '%d %m %Y %H')
-
 
         try:
             self.update_sb_drunken()

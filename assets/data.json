@@ -1,1 +1,1 @@
-{"my_config": {"drinking_rate": 294, "menge": 5000, "auf": 6, "ab": 23, "hours_awake": 17}, "user_data": {"amount_drunken": 550.0, "day": "15"}}
+{"my_config": {"drinking_rate": 294, "menge": 5000, "auf": 6, "ab": 23, "hours_awake": 17}, "user_data": {"amount_drunken": 3200.0, "date": "25.03.2022"}, "archive": {"data": [{"date": "24.03.2022", "amount_drunken": 0}, {"amount_drunken": 0, "date": "23.03.2022"}, {"amount_drunken": 0, "date": "22.03.2022"}, {"amount_drunken": 0, "date": "21.03.2022"}]}}
