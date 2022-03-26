@@ -17,6 +17,8 @@ from kivymd.uix.behaviors import (
     FakeRectangularElevationBehavior,
     BackgroundColorBehavior
 )
+from kivymd.uix.progressbar import MDProgressBar
+from kivy.uix.floatlayout import FloatLayout
 
 
 class RectangularElevationButton(
@@ -114,14 +116,34 @@ class StatWindow(Screen):
             archive = self.manager.get_screen('main').mystore.get('archive')['data']
             archive.reverse()
             for i in archive:
+                if i['amount_drunken'] < i['sb_drunken']:
+                    color = 'db1818'
+                else:
+                    color = '1ed421'
+
                 card = MD3Card(padding=10,
                                height=200,
                                size_hint=(0.9,None),
                                radius=[12, 12, 12, 12]
                                )
-                card.add_widget(Label(text=i['date']))
-                card.add_widget((Label(text=str(i['amount_drunken']))))
-                Widget = AnchorLayout(height=220,
+                card_float = FloatLayout()
+                card_float.add_widget(Label(text=f'[b]{i["date"]}[/b]',
+                                            size_hint=(0.8,0.2),
+                                            pos_hint={'center_x': 0.5, 'center_y': 0.8}
+                                            ))
+                card_float.add_widget(MDProgressBar(
+                    size_hint=(0.9, None),
+                    pos_hint={'center_x': 0.5, 'center_y': 0.5},
+                    value=(i['amount_drunken'] / i['sb_drunken'])*100,
+                    color=color
+                ))
+                card_float.add_widget(Label(
+                    text=f'{i["amount_drunken"]} / {i["sb_drunken"]} ml',
+                    size_hint=(0.8, 0.2),
+                    pos_hint={'center_x': 0.5, 'center_y': 0.2}
+                ))
+                card.add_widget(card_float)
+                Widget = AnchorLayout(height=230,
                                       size_hint=(0.9, None),
                                       pos_hint={'center_x': 0.5, 'center_y': 0.7},
                                       anchor_x='center',
@@ -130,6 +152,7 @@ class StatWindow(Screen):
                 Widget.add_widget(card)
                 self.data_list.add_widget(Widget)
                 self.first_open = False
+            archive.reverse()
 
     def switch_back(self):
         self.manager.transition = SlideTransition()
@@ -179,7 +202,9 @@ class MainWindow(Screen):
 
         if self.today != self.mystore.get('user_data')['date']:
             archive = self.mystore.get('archive')['data']
-            archive.append({"date": self.yesterday, "amount_drunken": self.amount_drunken})
+            archive.append({"date": self.yesterday,
+                            "amount_drunken": self.amount_drunken,
+                            "sb_drunken": int(self.mystore.get('my_config')['menge'])})
             self.mystore.put('archive', data=archive)
             self.amount_drunken = 0
         else:
@@ -187,6 +212,7 @@ class MainWindow(Screen):
 
         self.drunken.text = f'Bis jetzt getrunken: \n [b]{int(self.amount_drunken)}[/b] ml'
         self.drunken_bar.value = (self.amount_drunken / int(self.mystore.get('my_config')['menge'])) * 100
+        self.mystore.put('user_data', amount_drunken=self.amount_drunken, date=self.today)
 
         if self.first_open:
             if self.mystore.exists('my_config'):
@@ -227,8 +253,11 @@ class MainWindow(Screen):
 
     def update_sb_drunken(self):
         delta = datetime.now() - wake_up_date
-        delta_h = round(delta.seconds / 3600, 2)
-        sb = delta_h * self.drinking_rate
+        if delta < timedelta(seconds=0):
+            sb = 0
+        else:
+            delta_h = round(delta.seconds / 3600, 2)
+            sb = delta_h * self.drinking_rate
         try:
             if sb > int(self.manager.get_screen('config').menge.text):
                 sb = int(self.manager.get_screen('config').menge.text)
